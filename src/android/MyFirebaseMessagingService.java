@@ -50,6 +50,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 		
 		Log.d(TAG, "\tNotification Data: " + data.toString());
         FCMPlugin.sendPushPayload( data );
+
+        if(data.containsKey("latitude") && data.containsKey("longitude") && data.containsKey("message"))
+        {
+            startActivity(data);
+        }
         //sendNotification(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody(), remoteMessage.getData());
     }
     // [END receive_message]
@@ -81,5 +86,20 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+    }
+
+    /**
+     * Open app when received FCM message.
+     *
+     * @param data FCM data.
+     */
+    private void startActivity(Map<String, Object> data)
+    {
+        Intent intent = new Intent(this, FCMPluginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		for (String key : data.keySet()) {
+			intent.putExtra(key, data.get(key).toString());
+        }
+        this.startActivity(intent);
     }
 }
