@@ -95,11 +95,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      */
     private void startActivity(Map<String, Object> data)
     {
+        Log.d(TAG, "startActivity");
         Intent intent = new Intent(this, FCMPluginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		for (String key : data.keySet()) {
 			intent.putExtra(key, data.get(key).toString());
         }
+        Log.d(TAG, "before startActivity");
         this.startActivity(intent);
+        Log.d(TAG, "activityStarted");
     }
 }
