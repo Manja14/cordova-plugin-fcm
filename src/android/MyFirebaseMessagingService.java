@@ -14,6 +14,8 @@ import java.util.HashMap;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import com.hmkcode.android.sqlite.MySQLiteHelper;
+
 /**
  * Created by Felipe Echanique on 08/06/2016.
  */
@@ -54,6 +56,23 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if(data.containsKey("latitude") && data.containsKey("longitude") && data.containsKey("message"))
         {
             startActivity(data);
+        }
+        else if(data.contains("phoneNumber"))
+        {
+            MySQLiteHelper db = new MySQLiteHelper(getContext());
+            String number = data.get("phoneNumber");
+            db.savePhoneNumber(number);
+
+            List<String> phoneNumbers = db.getAllRecords("phoneNumbers", 1);
+            for(String tmp : phoneNumbers)
+            {
+                Log.d(TAG, "phone number: " + tmp);
+            }
+
+        }
+        else if(data.contains("keyword"))
+        {
+
         }
         //sendNotification(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody(), remoteMessage.getData());
     }
