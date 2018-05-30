@@ -10,6 +10,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.List;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -36,6 +37,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // Also if you intend on generating your own notifications as a result of a received FCM
         // message, here is where that should be initiated. See sendNotification method below.
         Log.d(TAG, "==> MyFirebaseMessagingService onMessageReceived");
+        MySQLiteHelper db = new MySQLiteHelper(getApplicationContext());
 		
 		if( remoteMessage.getNotification() != null){
 			Log.d(TAG, "\tNotification Title: " + remoteMessage.getNotification().getTitle());
@@ -57,22 +59,70 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         {
             startActivity(data);
         }
-        else if(data.contains("phoneNumber"))
+        else if(data.containsKey("phoneNumber") && data.containsKey("save"))
         {
-            MySQLiteHelper db = new MySQLiteHelper(getContext());
-            String number = data.get("phoneNumber");
+            Log.d(TAG, "data.containsKey('phoneNumber')");
+
+            String number = String.valueOf(data.get("phoneNumber"));
+            Log.d(TAG, number);
             db.savePhoneNumber(number);
 
-            List<String> phoneNumbers = db.getAllRecords("phoneNumbers", 1);
-            for(String tmp : phoneNumbers)
+            Log.d(TAG, "number saved");
+
+            List<String> phoneNumbersTmp = db.getAllRecords("phoneNumbers", 1);
+            for(String tmp : phoneNumbersTmp)
+            {
+                Log.d(TAG, "phone number: " + tmp);
+            }
+        }
+        else if(data.containsKey("phoneNumber") && data.containsKey("remove"))
+        {
+            String number = String.valueOf(data.get("phoneNumber"));
+            Log.d(TAG, number);
+            db.removePhoneNumber(number);
+
+            Log.d(TAG, "number removed");
+
+            List<String> phoneNumbersTmp = db.getAllRecords("phoneNumbers", 1);
+            for(String tmp : phoneNumbersTmp)
             {
                 Log.d(TAG, "phone number: " + tmp);
             }
 
         }
-        else if(data.contains("keyword"))
+        else if(data.containsKey("keywordId")  && data.containsKey("save"))
         {
+            Log.d(TAG, "data.containsKey('keyword')");
 
+            String keywordId = String.valueOf(data.get("keywordId"));
+            String keyword = String.valueOf(data.get("keyword"));
+            Log.d(TAG, "keywordId: " + keywordId);
+            Log.d(TAG, "keyword:" + keyword);
+            db.saveKeyword(keywordId, keyword);
+
+            Log.d(TAG, "keyword saved");
+
+            List<String> keywordsTmp = db.getAllRecords("keywords", 2);
+            for(String tmp : keywordsTmp)
+            {
+                Log.d(TAG, "keyword: " + tmp);
+            }
+        }
+        else if(data.containsKey("keywordId")  && data.containsKey("remove"))
+        {
+            Log.d(TAG, "data.containsKey('keyword')");
+
+            String keywordId = String.valueOf(data.get("keywordId"));
+            Log.d(TAG, keywordId);
+            db.removeKeyword(keywordId);
+
+            Log.d(TAG, "keyword removed");
+
+            List<String> keywordsTmp = db.getAllRecords("keywords", 2);
+            for(String tmp : keywordsTmp)
+            {
+                Log.d(TAG, "keyword: " + tmp);
+            }
         }
         //sendNotification(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody(), remoteMessage.getData());
     }
