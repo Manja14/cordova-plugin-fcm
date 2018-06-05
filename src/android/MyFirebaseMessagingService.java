@@ -57,6 +57,26 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         if(data.containsKey("latitude") && data.containsKey("longitude") && data.containsKey("message"))
         {
+            if(data.containsKey("interventionId"))
+            {
+                String interventionId = String.valueOf(data.get("interventionId"));
+                List<String> interventionsTmp = db.getAllRecords("activeInterventions", 1);
+                if(interventionsTmp == null || interventionsTmp.size() == 0)
+                {
+                    startActivity(data);
+                    return;
+                }
+
+                for(String intervention: interventionsTmp)
+                {
+                    if(intervention.equals(interventionId))
+                    {
+                        Log.d(TAG, "Intervention with key: " + interventionId + " already exits.");
+                        return;
+                    }
+                }
+            }
+            
             startActivity(data);
         }
         else if(data.containsKey("phoneNumber") && data.containsKey("save"))
