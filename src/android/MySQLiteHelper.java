@@ -29,7 +29,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 "interventionId TEXT)";
  
         // create phoneNumbers table
-        db.execSQL(phoneNumbersQuery);
+        db.execSQL(interventionsQuery);
 
         // SQL statement to create phoneNumbers table
         String phoneNumbersQuery = "CREATE TABLE IF NOT EXISTS phoneNumbers ( " +
