@@ -23,6 +23,7 @@ import static android.view.WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCRE
 import static android.view.WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD;
 import static android.view.WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED;
 import static android.view.WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON;
+import static android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
 
 public class FCMPluginActivity extends Activity {
     private static String TAG = "FCMPlugin";
@@ -41,7 +42,10 @@ public class FCMPluginActivity extends Activity {
 
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wl = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK, "FCMPluginActivity");
-        wl.acquire();
+        if ((wl != null) && (wl.isHeld() == false)) 
+        {
+            wl.acquire(); 
+        }
 
         Window window = getWindow();
         window.addFlags(
