@@ -17,8 +17,7 @@ import java.util.HashMap;
 
 public class FCMPluginActivity extends Activity {
     private static String TAG = "FCMPlugin";
-    private PowerManager.WakeLock wl;
-
+    
     /*
      * this activity will be started if the user touches a notification that we own. 
      * We send it's data off to the push plugin for processing.
