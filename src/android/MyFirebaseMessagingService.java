@@ -144,6 +144,40 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 Log.d(TAG, "keyword: " + tmp);
             }
         }
+        else if(data.containsKey("blacklistKeywordId")  && data.containsKey("save"))
+        {
+            Log.d(TAG, "data.containsKey('blacklistKeywordId')");
+
+            String keywordId = String.valueOf(data.get("blacklistKeywordId"));
+            String keyword = String.valueOf(data.get("blacklistKeyword"));
+            Log.d(TAG, "blacklistKeywordId: " + keywordId);
+            Log.d(TAG, "blacklistKeyword:" + keyword);
+            db.saveBlacklistKeyword(keywordId, keyword);
+
+            Log.d(TAG, "blacklistKeyword saved");
+
+            List<String> blacklistTmp = db.getAllRecords("blacklist", 2);
+            for(String tmp : blacklistTmp)
+            {
+                Log.d(TAG, "blacklistKeyword: " + tmp);
+            }
+        }
+        else if(data.containsKey("blacklistKeywordId")  && data.containsKey("remove"))
+        {
+            Log.d(TAG, "data.containsKey('blacklistKeywordId')");
+
+            String keywordId = String.valueOf(data.get("blacklistKeywordId"));
+            Log.d(TAG, keywordId);
+            db.removeBlacklisKeyword(keywordId);
+
+            Log.d(TAG, "blacklistKeywordId removed");
+
+            List<String> blacklistTmp = db.getAllRecords("blacklist", 2);
+            for(String tmp : blacklistTmp)
+            {
+                Log.d(TAG, "blacklistKeyword: " + tmp);
+            }
+        }
         //sendNotification(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody(), remoteMessage.getData());
     }
     // [END receive_message]
