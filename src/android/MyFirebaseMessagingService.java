@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import java.util.Map;
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -53,7 +54,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
 		
 		Log.d(TAG, "\tNotification Data: " + data.toString());
-        FCMPlugin.sendPushPayload( data );
 
         if(data.containsKey("latitude") && data.containsKey("longitude") && data.containsKey("message"))
         {
@@ -63,6 +63,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 List<String> interventionsTmp = db.getAllRecords("activeInterventions", 1);
                 if(interventionsTmp == null || interventionsTmp.size() == 0)
                 {
+                    FCMPlugin.sendPushPayload( data );
                     startActivity(data);
                     return;
                 }
@@ -94,6 +95,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             {
                 Log.d(TAG, "phone number: " + tmp);
             }
+
+            FCMPlugin.sendPushPayload( data );
         }
         else if(data.containsKey("phoneNumber") && data.containsKey("remove"))
         {
@@ -108,6 +111,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             {
                 Log.d(TAG, "phone number: " + tmp);
             }
+
+            FCMPlugin.sendPushPayload( data );
 
         }
         else if(data.containsKey("keywordId")  && data.containsKey("save"))
@@ -127,6 +132,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             {
                 Log.d(TAG, "keyword: " + tmp);
             }
+
+            FCMPlugin.sendPushPayload( data );
         }
         else if(data.containsKey("keywordId")  && data.containsKey("remove"))
         {
@@ -143,6 +150,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             {
                 Log.d(TAG, "keyword: " + tmp);
             }
+
+            FCMPlugin.sendPushPayload( data );
         }
         else if(data.containsKey("blacklistKeywordId")  && data.containsKey("save"))
         {
@@ -161,6 +170,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             {
                 Log.d(TAG, "blacklistKeyword: " + tmp);
             }
+
+            FCMPlugin.sendPushPayload( data );
         }
         else if(data.containsKey("blacklistKeywordId")  && data.containsKey("remove"))
         {
@@ -177,6 +188,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             {
                 Log.d(TAG, "blacklistKeyword: " + tmp);
             }
+
+            FCMPlugin.sendPushPayload( data );
+        }
+        else
+        {
+            FCMPlugin.sendPushPayload( data );
         }
         //sendNotification(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody(), remoteMessage.getData());
     }
